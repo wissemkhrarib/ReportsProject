@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ReportsDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Bloc">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="ReportId" Type="Int32" Nullable="false" />
+    <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="X" Type="Int32" Nullable="false" />
+    <Property Name="Y" Type="Int32" Nullable="false" />
+    <Property Name="W" Type="Int32" Nullable="false" />
+    <Property Name="H" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Report" Relationship="Self.FK_Blocs_Reports" FromRole="Blocs" ToRole="Reports" />
+    <NavigationProperty Name="Dimensions" Relationship="Self.FK_Dimensions_Blocs" FromRole="Blocs" ToRole="Dimensions" />
+    <NavigationProperty Name="Series_Measures" Relationship="Self.FK_Series_Measures_Blocs1" FromRole="Blocs" ToRole="Series_Measures" />
+  </EntityType>
+  <EntityType Name="CustomerFilter">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="FilterId" Type="Int32" Nullable="false" />
+    <Property Name="CustomerId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Customer" Relationship="Self.FK_CustomersFilters_Customers" FromRole="CustomerFilters" ToRole="Customers" />
+    <NavigationProperty Name="Filter" Relationship="Self.FK_CustomersFilters_Filters" FromRole="CustomerFilters" ToRole="Filters" />
+  </EntityType>
+  <EntityType Name="CustomerReport">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="ReportId" Type="Int32" Nullable="false" />
+    <Property Name="CustomerId" Type="Int32" Nullable="false" />
+    <Property Name="CubeName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ServerName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DBName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DBType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Customer" Relationship="Self.FK_CustomersReports_Customers" FromRole="CustomerReports" ToRole="Customers" />
+    <NavigationProperty Name="Report" Relationship="Self.FK_CustomersReports_Reports" FromRole="CustomerReports" ToRole="Reports" />
+  </EntityType>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="CustomerName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="CustomerFilters" Relationship="Self.FK_CustomersFilters_Customers" FromRole="Customers" ToRole="CustomerFilters" />
+    <NavigationProperty Name="CustomerReports" Relationship="Self.FK_CustomersReports_Customers" FromRole="Customers" ToRole="CustomerReports" />
+  </EntityType>
+  <EntityType Name="Dimension">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="BlocId" Type="Int32" Nullable="false" />
+    <Property Name="FieldName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Alias" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Bloc" Relationship="Self.FK_Dimensions_Blocs" FromRole="Dimensions" ToRole="Blocs" />
+  </EntityType>
+  <EntityType Name="Filter">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="FilterName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Field" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Value" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="QueryStringKey" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ReportId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="CustomerFilters" Relationship="Self.FK_CustomersFilters_Filters" FromRole="Filters" ToRole="CustomerFilters" />
+    <NavigationProperty Name="Report" Relationship="Self.FK_Filters_Reports" FromRole="Filters" ToRole="Reports" />
+  </EntityType>
+  <EntityType Name="Report">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="ReportName" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="CubeName" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Blocs" Relationship="Self.FK_Blocs_Reports" FromRole="Reports" ToRole="Blocs" />
+    <NavigationProperty Name="CustomerReports" Relationship="Self.FK_CustomersReports_Reports" FromRole="Reports" ToRole="CustomerReports" />
+    <NavigationProperty Name="Filters" Relationship="Self.FK_Filters_Reports" FromRole="Reports" ToRole="Filters" />
+  </EntityType>
+  <EntityType Name="Series_Measures">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="BlocId" Type="Int32" Nullable="false" />
+    <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FieldName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Alias" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Bloc" Relationship="Self.FK_Series_Measures_Blocs1" FromRole="Series_Measures" ToRole="Blocs" />
+  </EntityType>
+  <Association Name="FK_Blocs_Reports">
+    <End Role="Reports" Type="Self.Report" Multiplicity="1" />
+    <End Role="Blocs" Type="Self.Bloc" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Reports">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Blocs">
+        <PropertyRef Name="ReportId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Dimensions_Blocs">
+    <End Role="Blocs" Type="Self.Bloc" Multiplicity="1" />
+    <End Role="Dimensions" Type="Self.Dimension" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Blocs">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Dimensions">
+        <PropertyRef Name="BlocId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Series_Measures_Blocs1">
+    <End Role="Blocs" Type="Self.Bloc" Multiplicity="1" />
+    <End Role="Series_Measures" Type="Self.Series_Measures" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Blocs">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Series_Measures">
+        <PropertyRef Name="BlocId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CustomersFilters_Customers">
+    <End Role="Customers" Type="Self.Customer" Multiplicity="1" />
+    <End Role="CustomerFilters" Type="Self.CustomerFilter" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CustomerFilters">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CustomersFilters_Filters">
+    <End Role="Filters" Type="Self.Filter" Multiplicity="1" />
+    <End Role="CustomerFilters" Type="Self.CustomerFilter" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Filters">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CustomerFilters">
+        <PropertyRef Name="FilterId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CustomersReports_Customers">
+    <End Role="Customers" Type="Self.Customer" Multiplicity="1" />
+    <End Role="CustomerReports" Type="Self.CustomerReport" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CustomerReports">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CustomersReports_Reports">
+    <End Role="Reports" Type="Self.Report" Multiplicity="1" />
+    <End Role="CustomerReports" Type="Self.CustomerReport" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Reports">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CustomerReports">
+        <PropertyRef Name="ReportId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Filters_Reports">
+    <End Role="Reports" Type="Self.Report" Multiplicity="1" />
+    <End Role="Filters" Type="Self.Filter" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Reports">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Filters">
+        <PropertyRef Name="ReportId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ReportsDbContext" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Blocs" EntityType="Self.Bloc" />
+    <EntitySet Name="CustomerFilters" EntityType="Self.CustomerFilter" />
+    <EntitySet Name="CustomerReports" EntityType="Self.CustomerReport" />
+    <EntitySet Name="Customers" EntityType="Self.Customer" />
+    <EntitySet Name="Dimensions" EntityType="Self.Dimension" />
+    <EntitySet Name="Filters" EntityType="Self.Filter" />
+    <EntitySet Name="Reports" EntityType="Self.Report" />
+    <EntitySet Name="Series_Measures" EntityType="Self.Series_Measures" />
+    <AssociationSet Name="FK_Blocs_Reports" Association="Self.FK_Blocs_Reports">
+      <End Role="Reports" EntitySet="Reports" />
+      <End Role="Blocs" EntitySet="Blocs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Dimensions_Blocs" Association="Self.FK_Dimensions_Blocs">
+      <End Role="Blocs" EntitySet="Blocs" />
+      <End Role="Dimensions" EntitySet="Dimensions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Series_Measures_Blocs1" Association="Self.FK_Series_Measures_Blocs1">
+      <End Role="Blocs" EntitySet="Blocs" />
+      <End Role="Series_Measures" EntitySet="Series_Measures" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CustomersFilters_Customers" Association="Self.FK_CustomersFilters_Customers">
+      <End Role="Customers" EntitySet="Customers" />
+      <End Role="CustomerFilters" EntitySet="CustomerFilters" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CustomersFilters_Filters" Association="Self.FK_CustomersFilters_Filters">
+      <End Role="Filters" EntitySet="Filters" />
+      <End Role="CustomerFilters" EntitySet="CustomerFilters" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CustomersReports_Customers" Association="Self.FK_CustomersReports_Customers">
+      <End Role="Customers" EntitySet="Customers" />
+      <End Role="CustomerReports" EntitySet="CustomerReports" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CustomersReports_Reports" Association="Self.FK_CustomersReports_Reports">
+      <End Role="Reports" EntitySet="Reports" />
+      <End Role="CustomerReports" EntitySet="CustomerReports" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Filters_Reports" Association="Self.FK_Filters_Reports">
+      <End Role="Reports" EntitySet="Reports" />
+      <End Role="Filters" EntitySet="Filters" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

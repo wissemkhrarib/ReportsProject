@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ReportsDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Blocs">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="ReportId" Type="int" Nullable="false" />
+    <Property Name="Type" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="X" Type="int" Nullable="false" />
+    <Property Name="Y" Type="int" Nullable="false" />
+    <Property Name="W" Type="int" Nullable="false" />
+    <Property Name="H" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CustomerFilters">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="FilterId" Type="int" Nullable="false" />
+    <Property Name="CustomerId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CustomerReports">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="ReportId" Type="int" Nullable="false" />
+    <Property Name="CustomerId" Type="int" Nullable="false" />
+    <Property Name="CubeName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="ServerName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="DBName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="DBType" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Customers">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="CustomerName" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Dimensions">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="BlocId" Type="int" Nullable="false" />
+    <Property Name="FieldName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Alias" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Filters">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="FilterName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Type" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Field" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Value" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="QueryStringKey" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="ReportId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Reports">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="ReportName" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="CubeName" Type="nchar" MaxLength="10" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Series_Measures">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="BlocId" Type="int" Nullable="false" />
+    <Property Name="Type" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="FieldName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Alias" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Blocs_Reports">
+    <End Role="Reports" Type="Self.Reports" Multiplicity="1" />
+    <End Role="Blocs" Type="Self.Blocs" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Reports">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Blocs">
+        <PropertyRef Name="ReportId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CustomersFilters_Customers">
+    <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
+    <End Role="CustomerFilters" Type="Self.CustomerFilters" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CustomerFilters">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CustomersFilters_Filters">
+    <End Role="Filters" Type="Self.Filters" Multiplicity="1" />
+    <End Role="CustomerFilters" Type="Self.CustomerFilters" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Filters">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CustomerFilters">
+        <PropertyRef Name="FilterId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CustomersReports_Customers">
+    <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
+    <End Role="CustomerReports" Type="Self.CustomerReports" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CustomerReports">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CustomersReports_Reports">
+    <End Role="Reports" Type="Self.Reports" Multiplicity="1" />
+    <End Role="CustomerReports" Type="Self.CustomerReports" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Reports">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CustomerReports">
+        <PropertyRef Name="ReportId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Dimensions_Blocs">
+    <End Role="Blocs" Type="Self.Blocs" Multiplicity="1" />
+    <End Role="Dimensions" Type="Self.Dimensions" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Blocs">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Dimensions">
+        <PropertyRef Name="BlocId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Filters_Reports">
+    <End Role="Reports" Type="Self.Reports" Multiplicity="1" />
+    <End Role="Filters" Type="Self.Filters" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Reports">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Filters">
+        <PropertyRef Name="ReportId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Series_Measures_Blocs1">
+    <End Role="Blocs" Type="Self.Blocs" Multiplicity="1" />
+    <End Role="Series_Measures" Type="Self.Series_Measures" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Blocs">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Series_Measures">
+        <PropertyRef Name="BlocId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ReportsDBModelStoreContainer">
+    <EntitySet Name="Blocs" EntityType="Self.Blocs" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CustomerFilters" EntityType="Self.CustomerFilters" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CustomerReports" EntityType="Self.CustomerReports" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Dimensions" EntityType="Self.Dimensions" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Filters" EntityType="Self.Filters" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Reports" EntityType="Self.Reports" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Series_Measures" EntityType="Self.Series_Measures" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Blocs_Reports" Association="Self.FK_Blocs_Reports">
+      <End Role="Reports" EntitySet="Reports" />
+      <End Role="Blocs" EntitySet="Blocs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CustomersFilters_Customers" Association="Self.FK_CustomersFilters_Customers">
+      <End Role="Customers" EntitySet="Customers" />
+      <End Role="CustomerFilters" EntitySet="CustomerFilters" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CustomersFilters_Filters" Association="Self.FK_CustomersFilters_Filters">
+      <End Role="Filters" EntitySet="Filters" />
+      <End Role="CustomerFilters" EntitySet="CustomerFilters" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CustomersReports_Customers" Association="Self.FK_CustomersReports_Customers">
+      <End Role="Customers" EntitySet="Customers" />
+      <End Role="CustomerReports" EntitySet="CustomerReports" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CustomersReports_Reports" Association="Self.FK_CustomersReports_Reports">
+      <End Role="Reports" EntitySet="Reports" />
+      <End Role="CustomerReports" EntitySet="CustomerReports" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Dimensions_Blocs" Association="Self.FK_Dimensions_Blocs">
+      <End Role="Blocs" EntitySet="Blocs" />
+      <End Role="Dimensions" EntitySet="Dimensions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Filters_Reports" Association="Self.FK_Filters_Reports">
+      <End Role="Reports" EntitySet="Reports" />
+      <End Role="Filters" EntitySet="Filters" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Series_Measures_Blocs1" Association="Self.FK_Series_Measures_Blocs1">
+      <End Role="Blocs" EntitySet="Blocs" />
+      <End Role="Series_Measures" EntitySet="Series_Measures" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
